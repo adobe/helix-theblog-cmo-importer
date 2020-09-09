@@ -8,13 +8,13 @@
             "type": "node",
             "request": "launch",
             "name": "Full local import",
-            "program": "${workspaceFolder}/src/import/full.js",
+            "program": "${workspaceFolder}/tools/full.js",
             "skipFiles": [
                 "<node_internals>/**"
             ],
             "args": [
-                //"./output/postslight.csv",
-                "./output/posts.csv",
+                //"./input/postslight.csv",
+                "./input/posts.csv",
                 "./output/301.csv",
                 "./output/5xx.csv"
             ]
@@ -23,7 +23,7 @@
             "type": "node",
             "request": "launch",
             "name": "One local import",
-            "program": "${workspaceFolder}/src/import/one.js",
+            "program": "${workspaceFolder}/tools/one.js",
             "skipFiles": [
                 "<node_internals>/**"
             ],
