@@ -12,26 +12,27 @@
 /* eslint-disable max-len */
 const { asyncForEach } = require('@adobe/helix-importer/src/generic/utils');
 
-const MAPPINGS_XLSX = '/importer/cmo/mappings.xlsx';
-
-const MAPPINGS_XLSX_WORKSHEET = ' - Migration';
-const MAPPINGS_XLSX_TABLE = '_map';
-
 const LANGS = ['en', 'de'];
 
-async function load(excelHandler) {
+async function load(excelHandler, params) {
+  const {
+    SP_MAPPINGS_XLSX: spMappingsXlsx,
+    SP_MAPPINGS_XLSX_WORKSHEET: spMappingsXlsxWorksheet,
+    SP_MAPPINGS_XLSX_TABLE: spMappingsXlsxTable,
+  } = params;
+
   const mappings = {};
 
-  asyncForEach(LANGS, async (lang) => {
+  await asyncForEach(LANGS, async (lang) => {
     mappings[lang] = {
       categories: {},
       products: {},
     };
 
-    const worksheet = `${lang}${MAPPINGS_XLSX_WORKSHEET}`;
-    const table = `${lang}${MAPPINGS_XLSX_TABLE}`;
+    const worksheet = `${lang}${spMappingsXlsxWorksheet}`;
+    const table = `${lang}${spMappingsXlsxTable}`;
 
-    const rows = await excelHandler.getRows(MAPPINGS_XLSX, worksheet, table);
+    const rows = await excelHandler.getRows(spMappingsXlsx, worksheet, table);
     rows.value.forEach((row) => {
       if (row && row.values && row.values.length > 0 && row.values[0].length > 1) {
         const cmo = row.values[0][0];

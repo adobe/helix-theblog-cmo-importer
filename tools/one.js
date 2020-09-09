@@ -9,7 +9,7 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-const index = require('../index');
+const index = require('../src/index');
 
 require('dotenv').config();
 
@@ -29,6 +29,12 @@ async function main() {
     AZURE_ONEDRIVE_ADMIN_LINK: process.env.AZURE_ONEDRIVE_ADMIN_LINK,
     FASTLY_TOKEN: process.env.FASTLY_TOKEN,
     FASTLY_SERVICE_ID: process.env.FASTLY_SERVICE_ID,
+    SP_URLS_XLSX: process.env.SP_URLS_XLSX,
+    SP_URLS_XLSX_WORKSHEET: process.env.SP_URLS_XLSX_WORKSHEET,
+    SP_URLS_XLSX_TABLE: process.env.SP_URLS_XLSX_TABLE,
+    SP_MAPPINGS_XLSX: process.env.SP_MAPPINGS_XLSX,
+    SP_MAPPINGS_XLSX_WORKSHEET: process.env.SP_MAPPINGS_XLSX_WORKSHEET,
+    SP_MAPPINGS_XLSX_TABLE: process.env.SP_MAPPINGS_XLSX_TABLE,
     localStorage: './output',
     cache: './.cache',
   });

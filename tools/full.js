@@ -18,12 +18,8 @@ const path = require('path');
 const ExcelHandler = require('@adobe/helix-importer/src/handlers/ExcelHandler');
 const CsvFile = require('@adobe/helix-importer/src/handlers/CsvFile');
 
-const { main: importer } = require('../index');
-const { load: loadMappings } = require('../mappings');
-
-const URLS_XLSX = '/importer/cmo/urls.xlsx';
-const URLS_XLSX_WORKSHEET = 'urls';
-const URLS_XLSX_TABLE = 'listOfURLS';
+const { main: importer } = require('../src/index');
+const { load: loadMappings } = require('../src/mappings');
 
 const IMPORT_BATCH_SIZE = 10;
 
@@ -101,9 +97,9 @@ async function doScan(params, scanned, excelHandler) {
 
   if (fullDataSet.length > 0) {
     await excelHandler.addRow(
-      URLS_XLSX,
-      URLS_XLSX_WORKSHEET,
-      URLS_XLSX_TABLE,
+      params.spUrlsXlsx,
+      params.spUrlsXlsxWorksheet,
+      params.spUrlsXlsxTable,
       fullDataSet,
     );
   }
@@ -123,6 +119,9 @@ async function main(params = {}) {
     AZURE_ONEDRIVE_CLIENT_SECRET: oneDriveClientSecret,
     AZURE_ONEDRIVE_REFRESH_TOKEN: oneDriveRefreshToken,
     AZURE_ONEDRIVE_ADMIN_LINK: oneDriveAdminLink,
+    SP_URLS_XLSX: spUrlsXlsx,
+    SP_URLS_XLSX_WORKSHEET: spUrlsXlsxWorksheet,
+    SP_URLS_XLSX_TABLE: spUrlsXlsxTable,
   } = params;
 
   try {
@@ -181,14 +180,18 @@ async function main(params = {}) {
       });
 
       // eslint-disable-next-line no-param-reassign
-      params.mappings = await loadMappings(excelHandler);
+      params.mappings = await loadMappings(excelHandler, params);
     } else {
       console.info('No OneDrive credentials provided');
       throw new Error('Missing OneDrive credentials');
     }
 
     // load urls already processed
-    const rows = await excelHandler.getRows(URLS_XLSX, URLS_XLSX_WORKSHEET, URLS_XLSX_TABLE);
+    const rows = await excelHandler.getRows(
+      spUrlsXlsx,
+      spUrlsXlsxWorksheet,
+      spUrlsXlsxTable,
+    );
 
     const count = await doScan(
       params,
@@ -222,4 +225,10 @@ main({
   localStorage: './output',
   cache: './.cache',
   updateExcel: false,
+  SP_URLS_XLSX: process.env.SP_URLS_XLSX,
+  SP_URLS_XLSX_WORKSHEET: process.env.SP_URLS_XLSX_WORKSHEET,
+  SP_URLS_XLSX_TABLE: process.env.SP_URLS_XLSX_TABLE,
+  SP_MAPPINGS_XLSX: process.env.SP_MAPPINGS_XLSX,
+  SP_MAPPINGS_XLSX_WORKSHEET: process.env.SP_MAPPINGS_XLSX_WORKSHEET,
+  SP_MAPPINGS_XLSX_TABLE: process.env.SP_MAPPINGS_XLSX_TABLE,
 });

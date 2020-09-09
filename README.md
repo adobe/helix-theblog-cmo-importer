@@ -1,6 +1,6 @@
 # Helix Service
 
-Helix TheBlog importer downloads the content associated to the provided url (blog post entry) and creates a markdown version stored in OneDrive.
+Helix TheBlog CMO importer downloads the content associated to the provided url (blog post entry) and creates a markdown version stored in OneDrive.
 
 - if url is not part of the urls list - OneDrive XLSX file (/importer/urls.xlsx)
 - download url content
@@ -19,11 +19,11 @@ The importer cannot be called directly but is invoked by the [scanner](https://g
 If you don't provide `FASTLY_SERVICE_ID` and `FASTLY_TOKEN`, then no redirects will be created for imported blog posts.
 
 ## Status
-[![codecov](https://img.shields.io/codecov/c/github/adobe/helix-theblog-importer.svg)](https://codecov.io/gh/adobe/helix-theblog-importer)
-[![CircleCI](https://img.shields.io/circleci/project/github/adobe/helix-theblog-importer.svg)](https://circleci.com/gh/adobe/helix-theblog-importer)
-[![GitHub license](https://img.shields.io/github/license/adobe/helix-theblog-importer.svg)](https://github.com/adobe/helix-theblog-importer/blob/master/LICENSE.txt)
-[![GitHub issues](https://img.shields.io/github/issues/adobe/helix-theblog-importer.svg)](https://github.com/adobe/helix-theblog-importer/issues)
-[![LGTM Code Quality Grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/adobe/helix-theblog-importer.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/adobe/helix-theblog-importer)
+[![codecov](https://img.shields.io/codecov/c/github/adobe/helix-theblog-cmo-importer.svg)](https://codecov.io/gh/adobe/helix-theblog-cmo-importer)
+[![CircleCI](https://img.shields.io/circleci/project/github/adobe/helix-theblog-cmo-importer.svg)](https://circleci.com/gh/adobe/helix-theblog-cmo-importer)
+[![GitHub license](https://img.shields.io/github/license/adobe/helix-theblog-cmo-importer.svg)](https://github.com/adobe/helix-theblog-cmo-importer/blob/master/LICENSE.txt)
+[![GitHub issues](https://img.shields.io/github/issues/adobe/helix-theblog-cmo-importer.svg)](https://github.com/adobe/helix-theblog-cmo-importer/issues)
+[![LGTM Code Quality Grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/adobe/helix-theblog-cmo-importer.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/adobe/helix-theblog-cmo-importer)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) 
 
 ## Installation
@@ -59,7 +59,7 @@ OneDrive shared folder: destination of the markdown file:
 
 - `AZURE_ONEDRIVE_CONTENT_LINK`
 
-Openwhish credentials to invoke the helix-theblog-importer action:
+Openwhish credentials to invoke the helix-theblog-cmo-importer action:
 
 - `OPENWHISK_API_KEY`
 - `OPENWHISK_API_HOST`
@@ -80,4 +80,4 @@ Fastly credentials to store keys in dictionary (url shortcuts mapping):
 
 Deploying Helix Service requires the `wsk` command line client, authenticated to a namespace of your choice. For Project Helix, we use the `helix` namespace.
 
-All commits to master that pass the testing will be deployed automatically. All commits to branches that will pass the testing will get commited as `/helix-theblog/helix-theblog-importer@ci<num>` and tagged with the CI build number.
+All commits to master that pass the testing will be deployed automatically. All commits to branches that will pass the testing will get commited as `/helix-theblog/helix-theblog-cmo-importer@ci<num>` and tagged with the CI build number.

@@ -19,10 +19,8 @@ const { BlobHandler } = require('@adobe/helix-documents-support');
 
 const cheerio = require('cheerio');
 const moment = require('moment');
-const escape = require('escape-html');
 const path = require('path');
 const rp = require('request-promise-native');
-const sanitize = require('sanitize-filename');
 
 const HelixImporter = require('@adobe/helix-importer/src/generic/HelixImporter');
 const { asyncForEach } = require('@adobe/helix-importer/src/generic/utils');
@@ -36,10 +34,6 @@ const { load: loadMappings } = require('./mappings');
 const TYPE_AUTHOR = 'authors';
 const TYPE_POST = 'publish';
 const TYPE_TOPIC = 'topics';
-
-const URLS_XLSX = '/importer/cmo/urls.xlsx';
-const URLS_XLSX_WORKSHEET = 'urls';
-const URLS_XLSX_TABLE = 'listOfURLS';
 
 const CMO_TOPIC = 'CMOByAdobe';
 
@@ -168,7 +162,7 @@ async function handleTopicsAndTopics(importer, $, outputPath, checkIfExists, map
       }
     } else {
       // throw new Error(`Found an unmapped topic: ${topic}`);
-      console.warn(`Found an unmapped topic: ${topic}`);
+      console.warn(`Found an unmapped topic: ${outputPath} / ${topic}`);
       topics.push(topic);
     }
 
@@ -191,7 +185,7 @@ async function handleTopicsAndTopics(importer, $, outputPath, checkIfExists, map
     async (t) => {
       const topicName = importer.sanitizeFilename(t);
       if (!checkIfExists || !await importer.exists(`${outputPath}/${TYPE_TOPIC}`, topicName)) {
-        logger.info(`Found a new topic: ${topicName}`);
+        logger.info(`Found a new topic: ${outputPath} / ${topicName}`);
         await importer.createMarkdownFile(`${outputPath}/${TYPE_TOPIC}`, topicName, `<h1>${t}</h1>`);
       }
     },
@@ -398,6 +392,9 @@ async function main(params = {}) {
     AZURE_ONEDRIVE_REFRESH_TOKEN: oneDriveRefreshToken,
     AZURE_ONEDRIVE_CONTENT_LINK: oneDriveContentLink,
     AZURE_ONEDRIVE_ADMIN_LINK: oneDriveAdminLink,
+    SP_URLS_XLSX: spUrlsXlsx,
+    SP_URLS_XLSX_WORKSHEET: spUrlsXlsxWorksheet,
+    SP_URLS_XLSX_TABLE: spUrlsXlsxTable,
     FASTLY_TOKEN,
     FASTLY_SERVICE_ID,
     localStorage,
@@ -454,7 +451,11 @@ async function main(params = {}) {
 
     if (!force) {
       // check if url has already been processed
-      const rows = await excelHandler.getRows(URLS_XLSX, URLS_XLSX_WORKSHEET, URLS_XLSX_TABLE);
+      const rows = await excelHandler.getRows(
+        spUrlsXlsx,
+        spUrlsXlsxWorksheet,
+        spUrlsXlsxTable,
+      );
 
       // rows.value[n].values[0][0] -> year
       // rows.value[n].values[0][1] -> url
@@ -475,7 +476,7 @@ async function main(params = {}) {
 
     if (!mappings) {
       // load the mappings
-      mappings = await loadMappings(excelHandler);
+      mappings = await loadMappings(excelHandler, params);
     }
 
     const importer = new HelixImporter({
@@ -509,9 +510,9 @@ async function main(params = {}) {
 
     if (updateExcel) {
       await excelHandler.addRow(
-        URLS_XLSX,
-        URLS_XLSX_WORKSHEET,
-        URLS_XLSX_TABLE,
+        spUrlsXlsx,
+        spUrlsXlsxWorksheet,
+        spUrlsXlsxTable,
         [[date, url, new Date().toISOString()]],
       );
     }
