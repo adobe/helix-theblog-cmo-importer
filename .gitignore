@@ -1,0 +1,13 @@
+coverage
+.nyc_output/
+node_modules/
+junit
+dist
+tmp
+logs
+.DS_Store
+test-results.xml
+.env
+
+.cache
+output
